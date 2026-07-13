@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sumitra Kathayat — QA Engineer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=IBM+Plex+Mono:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0B0E17;
+    --surface:#131826;
+    --surface-2:#171E2E;
+    --border:#232B3D;
+    --text:#EDF1F7;
+    --text-soft:#8992A6;
+    --teal:#22D3C5;
+    --teal-dim:rgba(34,211,197,0.12);
+    --magenta:#FF3E96;
+    --magenta-dim:rgba(255,62,150,0.12);
+    --display:'Space Grotesk', sans-serif;
+    --mono:'IBM Plex Mono', monospace;
+    --sans:'Inter', sans-serif;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html{scroll-behavior:smooth;}
+  body{background:var(--bg); color:var(--text); font-family:var(--sans); line-height:1.6; overflow-x:hidden;}
+  a{color:inherit;}
+  .wrap{max-width:1080px; margin:0 auto; padding:0 28px; position:relative; z-index:2;}
+
+  /* ---------- corner brackets, global decoration ---------- */
+  .corner{position:fixed; width:26px; height:26px; border-color:var(--teal); opacity:0.5; z-index:1; pointer-events:none;}
+  .corner.tl{top:18px; left:18px; border-top:2px solid; border-left:2px solid;}
+  .corner.br{bottom:18px; right:18px; border-bottom:2px solid; border-right:2px solid;}
+
+  /* ---------- nav ---------- */
+  .nav-outer{position:sticky; top:16px; z-index:60; display:flex; justify-content:center; padding:0 20px;}
+  nav{
+    width:100%; max-width:1080px;
+    background:rgba(18,24,38,0.75); backdrop-filter:blur(14px);
+    border:1px solid var(--border); border-radius:999px;
+    display:flex; align-items:center; justify-content:space-between;
+    padding:12px 14px 12px 24px;
+  }
+  .brand{font-family:var(--display); font-weight:700; font-size:16px; letter-spacing:0.06em; color:var(--teal);}
+  .nav-links{display:flex; gap:26px; font-family:var(--mono); font-size:12px; letter-spacing:0.05em;}
+  .nav-links a{text-decoration:none; color:var(--text-soft); text-transform:uppercase;}
+  .nav-links a:hover, .nav-links a.active{color:var(--text);}
+  .nav-cta{
+    font-family:var(--display); font-weight:600; font-size:12.5px; text-decoration:none;
+    background:var(--teal); color:#052322; padding:10px 20px; border-radius:999px;
+    display:inline-flex; align-items:center; gap:7px; letter-spacing:0.03em;
+    transition:transform .2s ease, box-shadow .2s ease;
+  }
+  .nav-cta:hover{transform:translateY(-1px); box-shadow:0 8px 20px -8px rgba(47,221,212,0.6);}
+  .menu-btn{display:none; background:none; border:none; color:var(--text); font-size:20px; cursor:pointer;}
+  @media(max-width:860px){
+    .nav-links{
+      position:fixed; top:78px; left:20px; right:20px; background:var(--surface);
+      border:1px solid var(--border); border-radius:16px; flex-direction:column; gap:0;
+      max-height:0; overflow:hidden; transition:max-height .25s ease; padding:0;
+    }
+    .nav-links.open{max-height:320px; padding:8px 0;}
+    .nav-links a{padding:12px 22px; display:block;}
+    .menu-btn{display:block;}
+    .nav-cta{display:none;}
+  }
+
+  /* ---------- hero ---------- */
+  header.hero{position:relative; padding:70px 0 90px; overflow:hidden;}
+  #particles{position:absolute; inset:0; z-index:0; opacity:0.55;}
+  .wire{position:absolute; color:var(--teal); opacity:0.55; z-index:1; animation:spin linear infinite;}
+  .wire.magenta{color:var(--magenta);}
+  @keyframes spin{from{transform:rotate(0deg);} to{transform:rotate(360deg);}}
+  @keyframes bob{0%,100%{transform:translateY(0);} 50%{transform:translateY(-14px);}}
+
+  .globe{position:absolute; top:-90px; left:-110px; width:280px; height:280px; color:var(--teal); opacity:0.35; z-index:1; animation:spin 60s linear infinite;}
+
+  .hero-inner{position:relative; z-index:2; text-align:center; padding-top:20px;}
+  .eyebrow{
+    display:flex; align-items:center; justify-content:center; gap:16px;
+    font-family:var(--mono); font-size:12px; letter-spacing:0.18em; color:var(--text-soft);
+    text-transform:uppercase; margin-bottom:26px;
+  }
+  .eyebrow .ln{width:44px; height:1px; background:var(--border);}
+
+  h1{
+    font-family:var(--display); font-weight:700; text-transform:uppercase;
+    font-size:clamp(42px,8vw,84px); line-height:0.98; letter-spacing:0.01em;
+  }
+  h1 .teal{color:var(--teal);}
+
+  .sub{
+    max-width:600px; margin:26px auto 6px; font-size:16px; color:var(--text-soft);
+  }
+  .sub .loc{
+    display:block; margin-top:6px; font-family:var(--mono); font-weight:600; font-size:19px; color:var(--teal);
+  }
+
+  .pill-row{display:flex; flex-wrap:wrap; justify-content:center; gap:10px; margin:30px 0 34px;}
+  .pill{
+    font-family:var(--mono); font-size:12px; letter-spacing:0.04em; text-transform:uppercase;
+    border:1px solid var(--border); color:var(--text-soft); padding:8px 15px; border-radius:999px;
+    background:var(--surface);
+  }
+
+  .cta-row{display:flex; justify-content:center; gap:14px; flex-wrap:wrap;}
+  .btn{
+    font-family:var(--display); font-weight:600; font-size:13.5px; text-decoration:none;
+    padding:14px 26px; border-radius:8px; letter-spacing:0.02em;
+    display:inline-flex; align-items:center; gap:8px; transition:transform .2s ease, box-shadow .2s ease;
+  }
+  .btn-solid{background:var(--teal); color:#052322;}
+  .btn-solid:hover{transform:translateY(-2px); box-shadow:0 10px 26px -10px rgba(47,221,212,0.55);}
+  .btn-outline{border:1.5px solid var(--border); color:var(--text);}
+  .btn-outline:hover{border-color:var(--text); transform:translateY(-2px);}
+
+  .scroll-ind{
+    position:relative; z-index:2; text-align:center; margin-top:56px;
+    font-family:var(--mono); font-size:11px; letter-spacing:0.2em; color:var(--text-soft); text-transform:uppercase;
+  }
+  .scroll-ind .stem{width:1px; height:34px; background:var(--border); margin:10px auto 0; position:relative; overflow:hidden;}
+  .scroll-ind .stem::after{
+    content:""; position:absolute; top:-30%; left:0; width:100%; height:30%; background:var(--teal);
+    animation:drip 1.8s ease-in-out infinite;
+  }
+  @keyframes drip{0%{top:-30%;} 100%{top:100%;}}
+
+  /* ---------- reveal ---------- */
+  .reveal{opacity:0; transform:translateY(20px); transition:opacity .55s ease, transform .55s ease;}
+  .reveal.in{opacity:1; transform:none;}
+
+  /* ---------- sections ---------- */
+  section{padding:80px 0; position:relative; z-index:2;}
+  .sec-head{text-align:center; margin-bottom:44px;}
+  .sec-eyebrow{
+    font-family:var(--mono); font-size:12px; letter-spacing:0.18em; color:var(--teal); text-transform:uppercase; margin-bottom:12px;
+  }
+  h2{font-family:var(--display); font-weight:700; font-size:clamp(26px,4vw,36px); text-transform:uppercase;}
+
+  /* ---------- cards ---------- */
+  .card{
+    background:var(--surface); border:1px solid var(--border); border-radius:14px; padding:26px 28px;
+    transition:border-color .25s ease, transform .25s ease, box-shadow .25s ease;
+  }
+  .card:hover{border-color:#334158; transform:translateY(-3px); box-shadow:0 20px 44px -26px rgba(0,0,0,0.6);}
+  .card-grid{display:grid; grid-template-columns:1fr; gap:18px;}
+  @media(min-width:720px){ .card-grid.cols-3{grid-template-columns:repeat(3,1fr);} }
+
+  .card-top{display:flex; justify-content:space-between; align-items:flex-start; gap:14px; flex-wrap:wrap; margin-bottom:10px;}
+  .card-title{font-family:var(--display); font-weight:600; font-size:17px;}
+  .card-sub{color:var(--text-soft); font-size:13.5px; margin-top:2px;}
+  .tag-pill{
+    font-family:var(--mono); font-size:10.5px; font-weight:600; letter-spacing:0.04em; text-transform:uppercase;
+    padding:5px 11px; border-radius:999px; white-space:nowrap;
+  }
+  .tag-pill.done{background:var(--teal-dim); color:var(--teal); border:1px solid var(--teal);}
+  .tag-pill.progress{background:var(--magenta-dim); color:var(--magenta); border:1px solid var(--magenta);}
+
+  /* ---------- skills ---------- */
+  .skill-group{margin-bottom:26px;}
+  .skill-group h3{font-family:var(--mono); font-size:11.5px; text-transform:uppercase; letter-spacing:0.08em; color:var(--text-soft); margin-bottom:12px; text-align:center;}
+  .chips{display:flex; flex-wrap:wrap; justify-content:center; gap:10px;}
+  .chip{
+    font-family:var(--mono); font-size:12.5px; letter-spacing:0.03em; text-transform:uppercase;
+    border:1px solid var(--border); background:var(--surface); color:var(--text); padding:8px 15px; border-radius:999px;
+    transition:border-color .2s ease;
+  }
+  .chip:hover{border-color:var(--teal); color:var(--teal);}
+
+  /* ---------- doc slots ---------- */
+  .doc-label{font-family:var(--mono); font-size:10.5px; text-transform:uppercase; letter-spacing:0.06em; color:var(--text-soft); margin:18px 0 10px;}
+  .doc-list{display:flex; flex-direction:column; gap:8px;}
+  .doc-item{
+    display:flex; align-items:center; justify-content:space-between; gap:12px;
+    padding:11px 14px; border:1.5px dashed var(--border); border-radius:8px;
+    transition:border-color .2s ease, background .2s ease;
+  }
+  .doc-item:hover{border-color:var(--teal); background:var(--teal-dim);}
+  .doc-name{display:flex; align-items:center; gap:10px; font-size:13px; color:var(--text-soft);}
+  .doc-icon{
+    width:26px; height:26px; border-radius:5px; display:flex; align-items:center; justify-content:center;
+    font-family:var(--mono); font-size:9px; font-weight:700; flex-shrink:0;
+    background:var(--surface-2); color:var(--text-soft); border:1px solid var(--border);
+  }
+  .doc-action{font-family:var(--mono); font-size:11px; color:var(--text-soft); text-decoration:none;}
+  .doc-action.ready{color:var(--teal);}
+
+  .setup-note{
+    background:var(--surface); border:1px dashed var(--border); border-radius:10px; padding:18px 20px; margin-top:30px;
+    font-size:13px; color:var(--text-soft); text-align:center;
+  }
+  .setup-note b{color:var(--text);} .setup-note code{font-family:var(--mono); background:var(--surface-2); padding:2px 6px; border-radius:4px; color:var(--text);}
+
+  /* ---------- contact ---------- */
+  footer{padding:80px 0 60px; text-align:center;}
+  .contact-card{max-width:560px; margin:0 auto;}
+  .contact-pills{display:flex; flex-wrap:wrap; justify-content:center; gap:10px; margin:24px 0 30px;}
+  .fine-print{font-family:var(--mono); font-size:11px; color:var(--text-soft); letter-spacing:0.05em; margin-top:50px; text-transform:uppercase;}
+
+  ::selection{background:var(--teal); color:#052322;}
+  a:focus-visible, button:focus-visible{outline:2px solid var(--teal); outline-offset:2px;}
+  @media(prefers-reduced-motion: reduce){
+    .wire, .globe{animation:none;}
+    .scroll-ind .stem::after{animation:none;}
+    .reveal{opacity:1; transform:none; transition:none;}
+    html{scroll-behavior:auto;}
+  }
+</style>
+</head>
+<body>
+
+<div class="corner tl"></div>
+<div class="corner br"></div>
+
+<div class="nav-outer">
+  <nav>
+    <div class="brand">SK</div>
+    <button class="menu-btn" id="menuBtn" aria-label="Toggle menu">≡</button>
+    <div class="nav-links" id="navLinks">
+      <a href="#home" class="active">Home</a>
+      <a href="#skills">Skills</a>
+      <a href="#projects">Projects</a>
+      <a href="#certificate">Certificate</a>
+      <a href="#qualification">Qualification</a>
+      <a href="#contact">Contact</a>
+    </div>
+    <a class="nav-cta" href="docs/sumitra-kathayat-cv.pdf" download>⬇ CV</a>
+  </nav>
+</div>
+
+<header class="hero" id="home">
+  <canvas id="particles"></canvas>
+
+  <svg class="globe" viewBox="0 0 200 200" fill="none" stroke="currentColor" stroke-width="1">
+    <circle cx="100" cy="100" r="90"/>
+    <ellipse cx="100" cy="100" rx="90" ry="34"/>
+    <ellipse cx="100" cy="100" rx="90" ry="62"/>
+    <ellipse cx="100" cy="100" rx="34" ry="90"/>
+    <ellipse cx="100" cy="100" rx="62" ry="90"/>
+  </svg>
+
+  <svg class="wire" viewBox="0 0 60 60" width="40" height="40" style="top:14%; right:8%; animation-duration:22s;">
+    <polygon points="30,4 56,30 30,56 4,30" fill="none" stroke="currentColor" stroke-width="1.5"/>
+    <line x1="30" y1="4" x2="30" y2="56" stroke="currentColor"/><line x1="4" y1="30" x2="56" y2="30" stroke="currentColor"/>
+  </svg>
+  <svg class="wire magenta" viewBox="0 0 60 60" width="30" height="30" style="top:8%; left:16%; animation-duration:16s; animation-direction:reverse;">
+    <polygon points="30,4 56,30 30,56 4,30" fill="none" stroke="currentColor" stroke-width="1.5"/>
+  </svg>
+  <svg class="wire" viewBox="0 0 60 60" width="46" height="46" style="bottom:16%; right:6%; animation-duration:26s;">
+    <polygon points="30,4 56,30 30,56 4,30" fill="none" stroke="currentColor" stroke-width="1.5"/>
+    <line x1="4" y1="30" x2="56" y2="30" stroke="currentColor"/>
+  </svg>
+  <svg class="wire magenta" viewBox="0 0 60 60" width="26" height="26" style="bottom:22%; left:10%; animation-duration:14s;">
+    <polygon points="30,4 56,30 30,56 4,30" fill="none" stroke="currentColor" stroke-width="1.5"/>
+  </svg>
+  <svg class="wire" viewBox="0 0 60 60" width="20" height="20" style="top:38%; left:5%; animation-duration:12s; animation-direction:reverse;">
+    <polygon points="30,4 56,30 30,56 4,30" fill="none" stroke="currentColor" stroke-width="1.5"/>
+  </svg>
+
+  <div class="wrap hero-inner">
+    <div class="eyebrow"><span class="ln"></span>QA TRAINEE &amp; CSIT STUDENT<span class="ln"></span></div>
+    <h1>SUMITRA<br><span class="teal">KATHAYAT</span></h1>
+    <p class="sub">
+      Ensuring software quality through manual testing, API validation, and Selenium automation — final-semester CSIT student.
+    </p>
+    <p class="sub" style="margin-top:-4px;">
+      <span class="loc">Patandhoka, Lalitpur</span>
+    </p>
+
+    <div class="pill-row">
+      <span class="pill">Manual Testing</span>
+      <span class="pill">Selenium</span>
+      <span class="pill">API Testing</span>
+      <span class="pill">Postman</span>
+      <span class="pill">Jira</span>
+      <span class="pill">Java</span>
+    </div>
+
+    <div class="cta-row">
+      <a class="btn btn-solid" href="#projects">VIEW PROJECTS</a>
+      <a class="btn btn-outline" href="#contact">LET'S TALK</a>
+    </div>
+
+    <div class="scroll-ind">SCROLL<div class="stem"></div></div>
+  </div>
+</header>
+
+<section id="skills">
+  <div class="wrap reveal">
+    <div class="sec-head">
+      <div class="sec-eyebrow">01 — Tool Stack</div>
+      <h2>Technical Skills</h2>
+    </div>
+
+    <div class="skill-group">
+      <h3>Testing Types</h3>
+      <div class="chips">
+        <span class="chip">Manual Testing</span><span class="chip">Functional Testing</span>
+        <span class="chip">Regression Testing</span><span class="chip">API Testing</span>
+        <span class="chip">Exploratory Testing</span>
+      </div>
+    </div>
+    <div class="skill-group">
+      <h3>Automation</h3>
+      <div class="chips">
+        <span class="chip">Selenium WebDriver</span><span class="chip">Java</span><span class="chip">TestNG</span>
+      </div>
+    </div>
+    <div class="skill-group">
+      <h3>API &amp; Tools</h3>
+      <div class="chips"><span class="chip">Postman</span></div>
+    </div>
+    <div class="skill-group">
+      <h3>Defect &amp; Test Management</h3>
+      <div class="chips">
+        <span class="chip">Jira</span><span class="chip">Bug Tracking</span><span class="chip">Defect Reporting</span>
+        <span class="chip">Test Case Design</span><span class="chip">Test Planning</span>
+      </div>
+    </div>
+    <div class="skill-group">
+      <h3>Methodologies</h3>
+      <div class="chips">
+        <span class="chip">SDLC</span><span class="chip">STLC</span><span class="chip">Agile Testing</span>
+        <span class="chip">SQL (basic)</span><span class="chip">MS Excel</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+
+<section id="projects">
+  <div class="wrap reveal">
+    <div class="sec-head">
+      <div class="sec-eyebrow">02 — In the Lab</div>
+      <h2>Projects</h2>
+    </div>
+
+    <div class="card-grid">
+      <div class="card">
+        <div class="card-top">
+          <div class="card-title">OpenCart E-commerce Website — Manual Testing</div>
+          <span class="tag-pill done">✓ Completed</span>
+        </div>
+        <p class="card-sub"><b style="color:var(--text);">Tools:</b> Manual Testing, Test Scenario Design, Test Case Design</p>
+        <p class="card-sub"><b style="color:var(--text);">Scope:</b> Performed manual testing on the live e-commerce demo site
+          <a href="https://demo.opencart.com" target="_blank" rel="noopener" style="color:var(--teal); text-decoration:underline;">demo.opencart.com</a>.
+          Wrote a full test scenario document and detailed test cases covering Registration, Login, Forgot Password, and Create New Account
+          modules, with Pass/Fail status recorded for each case.</p>
+        <div class="doc-label">Project Documents</div>
+        <div class="doc-list">
+          <div class="doc-item"><div class="doc-name"><span class="doc-icon">PDF</span>Test Scenario Document</div><a class="doc-action ready" href="docs/opencart-test-scenarios.pdf" target="_blank">View ↗</a></div>
+          <div class="doc-item"><div class="doc-name"><span class="doc-icon">PDF</span>Test Cases — Registration</div><a class="doc-action ready" href="docs/opencart-test-cases-registration.pdf" target="_blank">View ↗</a></div>
+          <div class="doc-item"><div class="doc-name"><span class="doc-icon">PDF</span>Test Cases — Login</div><a class="doc-action ready" href="docs/opencart-test-cases-login.pdf" target="_blank">View ↗</a></div>
+          <div class="doc-item"><div class="doc-name"><span class="doc-icon">PDF</span>Test Cases — Create New Account</div><a class="doc-action ready" href="docs/opencart-test-cases-create-account.pdf" target="_blank">View ↗</a></div>
+          <div class="doc-item"><div class="doc-name"><span class="doc-icon">PDF</span>Test Cases — Forgot Password</div><a class="doc-action ready" href="docs/opencart-test-cases-forgot-password.pdf" target="_blank">View ↗</a></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-top">
+          <div class="card-title">Hisab Kitab — Business Management Platform (Manual Testing)</div>
+          <span class="tag-pill done">✓ Completed</span>
+        </div>
+        <p class="card-sub"><b style="color:var(--text);">Tools:</b> Manual Testing, Test Case Design, Boundary &amp; Security Testing</p>
+        <p class="card-sub"><b style="color:var(--text);">Scope:</b> Tested the Registration flow of the staging business management platform
+          <a href="https://staging.hisabkitabnepal.com/admin/register" target="_blank" rel="noopener" style="color:var(--teal); text-decoration:underline;">staging.hisabkitabnepal.com</a>.
+          Wrote 78 detailed test cases covering functional, boundary, security (SQL injection, script injection), UI, responsive,
+          accessibility, browser compatibility, and performance testing, with Pass/Fail status recorded for each case.</p>
+        <div class="doc-label">Project Documents</div>
+        <div class="doc-list">
+          <div class="doc-item"><div class="doc-name"><span class="doc-icon">PDF</span>Test Cases — Registration</div><a class="doc-action ready" href="docs/hisabkitab-test-cases-registration.pdf" target="_blank">View ↗</a></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-top">
+          <div class="card-title">EscuelaJS Fake Store — API Testing</div>
+          <span class="tag-pill done">✓ Completed</span>
+        </div>
+        <p class="card-sub"><b style="color:var(--text);">Tools:</b> API Testing, REST API Validation, Postman</p>
+        <p class="card-sub"><b style="color:var(--text);">Scope:</b> Tested REST API endpoints for the
+          <a href="https://fakeapi.platzi.com" target="_blank" rel="noopener" style="color:var(--teal); text-decoration:underline;">Platzi Fake Store API</a>
+          covering Products, Categories, Users, Auth, Locations, and File Upload modules. Verified GET/POST/PUT/DELETE requests,
+          query parameter filtering, and status code validation across 40+ test cases.</p>
+        <div class="doc-label">Project Documents</div>
+        <div class="doc-list">
+          <div class="doc-item"><div class="doc-name"><span class="doc-icon">PDF</span>API Test Cases</div><a class="doc-action ready" href="docs/escuelajs-api-test-cases.pdf" target="_blank">View ↗</a></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="certificate">
+  <div class="wrap reveal">
+    <div class="sec-head">
+      <div class="sec-eyebrow">03 — Verified</div>
+      <h2>Certificate</h2>
+    </div>
+    <div class="card" style="max-width:640px; margin:0 auto;">
+      <div class="card-top">
+        <div>
+          <div class="card-title">Quality Assurance Course</div>
+          <div class="card-sub">Code IT · Credential ID: CION-21459 · Issued May 2026</div>
+        </div>
+        <span class="tag-pill done">✓ Verified</span>
+      </div>
+      <p class="card-sub" style="margin-top:10px;">
+        Covered QA fundamentals, manual testing techniques, test case creation, bug reporting,
+        functional testing, regression testing, and automation testing using Selenium.
+      </p>
+      <div class="doc-list" style="margin-top:16px;">
+        <div class="doc-item">
+          <div class="doc-name"><span class="doc-icon">PDF</span>Certificate</div>
+          <a class="doc-action ready" href="docs/certificate-quality-assurance-codeit.pdf" target="_blank">View ↗</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="qualification">
+  <div class="wrap reveal">
+    <div class="sec-head">
+      <div class="sec-eyebrow">04 — Background</div>
+      <h2>Qualification</h2>
+    </div>
+    <div class="card-grid cols-3">
+      <div class="card">
+        <div class="card-top">
+          <div><div class="card-title">BSc. CSIT</div><div class="card-sub">Computer Science &amp; IT</div></div>
+          <span class="tag-pill progress">Final Sem.</span>
+        </div>
+        <p class="card-sub">Padmakanya Multiple Campus, Kathmandu (Tribhuvan University)</p>
+      </div>
+      <div class="card">
+        <div class="card-top">
+          <div><div class="card-title">SLC</div><div class="card-sub">Higher Secondary Education</div></div>
+          <span class="tag-pill done">2079</span>
+        </div>
+        <p class="card-sub">Omega International Secondary School, Lalitpur</p>
+      </div>
+      <div class="card">
+        <div class="card-top">
+          <div><div class="card-title">SEE</div><div class="card-sub">Secondary Education</div></div>
+          <span class="tag-pill done">2076</span>
+        </div>
+        <p class="card-sub">Shree Madan Smarak Secondary School, Lalitpur</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer id="contact">
+  <div class="wrap reveal">
+    <div class="sec-head">
+      <div class="sec-eyebrow">05 — Get In Touch</div>
+      <h2>Contact</h2>
+    </div>
+    <div class="contact-card">
+      <p style="color:var(--text-soft);">Open to Trainee and Junior QA Engineer roles — on-site or remote, Kathmandu and beyond.</p>
+      <div class="contact-pills">
+        <span class="pill">✉ sumitrakathayat590@gmail.com</span>
+        <span class="pill">☎ +977-9803465908</span>
+        <span class="pill">⌂ Patandhoka, Lalitpur</span>
+      </div>
+      <div class="cta-row">
+        <a class="btn btn-solid" href="mailto:sumitrakathayat590@gmail.com">EMAIL ME</a>
+        <a class="btn btn-outline" href="https://www.linkedin.com/in/sumitra-kathayat-24b3b82a7" target="_blank" rel="noopener">LINKEDIN</a>
+      </div>
+    </div>
+    <p class="fine-print">Sumitra Kathayat · QA Portfolio · Last updated May 2026</p>
+  </div>
+</footer>
+
+<script>
+  // mobile nav
+  const menuBtn = document.getElementById('menuBtn');
+  const navLinks = document.getElementById('navLinks');
+  menuBtn.addEventListener('click', () => navLinks.classList.toggle('open'));
+  navLinks.querySelectorAll('a').forEach(a => a.addEventListener('click', () => navLinks.classList.remove('open')));
+
+  // scroll-spy
+  const sections = document.querySelectorAll('section, header.hero');
+  const links = document.querySelectorAll('.nav-links a');
+  const spy = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if(entry.isIntersecting){
+        const id = entry.target.getAttribute('id');
+        links.forEach(l => l.classList.toggle('active', l.getAttribute('href') === '#' + id));
+      }
+    });
+  }, { rootMargin: '-40% 0px -55% 0px' });
+  sections.forEach(s => spy.observe(s));
+
+  // reveal on scroll
+  const revealEls = document.querySelectorAll('.reveal');
+  const revealObs = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if(entry.isIntersecting){ entry.target.classList.add('in'); revealObs.unobserve(entry.target); }
+    });
+  }, { threshold: 0.12 });
+  revealEls.forEach(el => revealObs.observe(el));
+
+  // constellation particle network (hero only)
+  const canvas = document.getElementById('particles');
+  const ctx = canvas.getContext('2d');
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  let particles = [];
+
+  function resize(){
+    const hero = document.querySelector('header.hero');
+    canvas.width = hero.offsetWidth;
+    canvas.height = hero.offsetHeight;
+  }
+  function initParticles(){
+    const count = Math.min(70, Math.floor((canvas.width * canvas.height) / 18000));
+    particles = Array.from({length: count}, () => ({
+      x: Math.random() * canvas.width,
+      y: Math.random() * canvas.height,
+      vx: (Math.random() - 0.5) * 0.25,
+      vy: (Math.random() - 0.5) * 0.25
+    }));
+  }
+  function step(){
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+    ctx.fillStyle = 'rgba(34,211,197,0.55)';
+    for(const p of particles){
+      p.x += p.vx; p.y += p.vy;
+      if(p.x < 0 || p.x > canvas.width) p.vx *= -1;
+      if(p.y < 0 || p.y > canvas.height) p.vy *= -1;
+      ctx.beginPath(); ctx.arc(p.x, p.y, 1.6, 0, Math.PI*2); ctx.fill();
+    }
+    for(let i=0; i<particles.length; i++){
+      for(let j=i+1; j<particles.length; j++){
+        const dx = particles[i].x - particles[j].x, dy = particles[i].y - particles[j].y;
+        const dist = Math.sqrt(dx*dx + dy*dy);
+        if(dist < 130){
+          ctx.strokeStyle = 'rgba(139,150,171,' + (0.18 * (1 - dist/130)) + ')';
+          ctx.lineWidth = 1;
+          ctx.beginPath(); ctx.moveTo(particles[i].x, particles[i].y); ctx.lineTo(particles[j].x, particles[j].y); ctx.stroke();
+        }
+      }
+    }
+    if(!reduceMotion) requestAnimationFrame(step);
+  }
+  window.addEventListener('resize', () => { resize(); initParticles(); });
+  resize(); initParticles(); step();
+</script>
+
+</body>
+</html>
